@@ -1,0 +1,328 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+div.img {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 180px;
+}
+
+div.img:hover {
+    border: 1px solid #777;
+}
+
+div.img img {
+    width: 178px;
+    height: 110px;
+}
+
+div.desc {
+    padding: 5px;
+    text-align: center;
+}
+body {margin:0;}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    top: 0;
+    width: 100%;
+}
+
+li {
+    float: left;
+    border-right:1px solid #bbb;
+}
+
+li:last-child {
+    border-right: none;
+}
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.button4 {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    background-color: black;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+
+div.life{
+    float: left;
+    width: 100%;
+}
+div.introduce{
+    position: relative;
+    top: 115px;
+    left: 63px;
+    color: chocolate;
+    width: 1089px;
+}
+
+div.price{
+    position: relative;
+    top: 6px;
+    color: red;
+    font-size: 35px;
+    width: 1000px;
+}
+
+div.amountPrice{
+    position: relative;
+    left: 200px;
+    font-size: 35px;
+    color: red;
+    top: -40px;
+    width: 683px;
+    margin: 0px;;
+}
+
+div.amount{
+    position: relative;
+    top: -85px;
+    left: 460px;
+    width: 780px;
+    font-size: 35px;
+}
+
+a.add{
+    position: relative;
+    left: 1000px;
+    font-size: 25px;
+    top: -50px;
+}
+
+a.addGet{
+    position: relative;
+    font-size: 23px;
+    left: 994px;
+    bottom: 51px;
+}
+a.remove{
+    position: relative;
+    left: 1120px;
+    top: -50px;
+    font-size: 25px;
+}
+
+a.removeOne{
+    position: relative;
+    left: 891px;
+    top: -50px;
+    font-size: 25px;
+}
+
+div.cut{
+    position: relative;
+    left: -185px;
+    top: -5px;
+}
+
+div.phone{
+    position: relative;
+    top: 30px;
+    font-size: 20px;
+}
+
+div.time{
+    position: relative;
+    left: 649px;
+    top: -135px;
+    width: 500px;
+}
+
+.a:link,.a:visited
+{
+    font-weight: bold;
+    color:#FFFFFF;
+    background-color:#98bf21;
+    width:120px;
+    text-align:center;
+    padding:4px;
+    text-decoration:none;
+}
+.a:hover,.a:active
+{
+    background-color:#7A991A;
+}
+
+a.send{
+    position: relative;
+    left: 1100px;
+    bottom: 160px;
+    font-size: 30px;
+}
+
+a.refuse{
+    position: relative;
+    left: 1130px;
+    bottom: 160px;
+    font-size: 30px;
+}
+
+div.state{
+    position: relative;
+    left: 649px;
+    bottom: 130px;
+    width: 500px;
+    font-size: 25px;
+}
+
+div.reply{
+    position: relative;
+    left: 990px;
+    width: 430px;
+    top: -215px;
+    font-size: 20px;
+}
+
+
+
+.k{
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+    position: relative;
+    left: 1317px;
+    bottom: 215px;
+}
+
+.button1 {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+    position: relative;
+    left: 1000px;
+    bottom: 115px;
+}
+
+.button1:hover {
+    background-color: #555555;
+    color: white;
+}
+
+#star{
+    position: relative;
+    top: -280px;
+    left: 1300px;
+}
+
+#text{
+    position: relative;
+    left: 1135px;
+    bottom: 210px;
+
+}
+
+a.comment{
+    position: relative;
+    left: 805px;
+    top: -229px;
+    font-size: 20px;
+}
+
+a.grade{
+    position: relative;
+    left: 761px;
+    top: -261px;
+    font-size: 25px;
+}
+
+input.reply{
+    position: relative;
+    left: 1278px;
+    top: -288px;
+}
+
+.replySubmit{
+    left: 1130px;
+    bottom: 218px;
+}
+
+.replyRight{
+    position: relative;
+    left: 825px;
+    bottom: 164px;
+    font-size: 30px
+}
+
+.commentRight{
+    position: relative;
+    left: 1150px;
+    bottom: 159px;
+    font-size: 30px;
+}
+
+div.buyWithPoint{
+    position: relative;
+    width: 500px;
+    left: 699px;
+    bottom: 123px;
+    font-size: 25px;
+    color: red;
+}
+
+div.getPoint{
+    position: relative;
+    bottom: 155px;
+    left: 1162px;
+    font-size: 25px;
+    width: 500px;
+}
+
+div.factPay{
+    width: 300px;
+    font-size: 35px;
+    position: relative;
+    left: 1152px;
+    bottom: 201px;
+    color: rebeccapurple;
+}

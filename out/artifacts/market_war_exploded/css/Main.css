@@ -1,0 +1,199 @@
+.div1{
+    position: absolute;
+    top: 25%;
+    right: 86%;
+    width: 210px;
+    height: 265px;
+    margin-top: -121px;
+    background-color: rgba(119, 190, 90, 0.5);
+    border-radius: 30px;
+}
+.div2{
+    position: absolute;
+    top: 25%;
+    right: 55%;
+    width: 307px;
+    height: 435px;
+    margin-top: -121px;
+    background-color: rgba(148, 168, 227, 0.5);
+    border-radius: 30px;
+}
+.div3{
+    position: absolute;
+    top: 25%;
+    right: 17%;
+    width: 307px;
+    height: 435px;
+    margin-top: -121px;
+    background-color: rgba(68, 103, 207, 0.5);
+    border-radius: 30px;
+}
+.a1 {
+    text-decoration: none;
+    width: 133px;
+    display: grid;
+    background-color: #808680;
+    color: #fff;
+    padding: 9px 14px;
+    border-radius: 5px;
+    font-size: 22px;
+}
+.a2{
+    text-decoration: none;
+    width: 133px;
+    display: grid;
+    background-color: #865c7b;
+    color: #fff;
+    padding: 9px 14px;
+    border-radius: 5px;
+    font-size: 22px;
+}
+
+.inputPicture{
+    position: absolute;
+    height: 67px;
+    width: 75px;
+    left: 124px;
+    z-index: 100;
+    opacity: 0;
+}
+img{
+    height: 8%;
+    width: 5%;
+    left: 8%;
+    top: 8%;
+    position: absolute;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
+
+
+.button {
+    display: inline-block;
+    border-radius: 4px;
+    background-color: #f4511e;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 28px;
+    padding: 20px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+.button span:after {
+    content: '»';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.button:hover span {
+    padding-right: 25px;
+}
+
+.button:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+.button5 {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 9px 0px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+}
+
+.button5:hover {
+    background-color: #555555;
+    color: white;
+}
+
+
+
+
+
+
+/* 弹窗 (background) */
+.modal {
+    display: none; /* 默认隐藏 */
+    position: fixed; /* 固定定位 */
+    z-index: 1; /* 设置在顶层 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+/* 弹窗内容 */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* 关闭按钮 */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+

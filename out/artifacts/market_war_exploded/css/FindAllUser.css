@@ -1,0 +1,176 @@
+table {
+    border-collapse: collapse;
+    font-family: Futura, Arial, sans-serif;
+    border-collapse: collapse;
+    width: 1032px;
+    margin: -38px auto;
+    text-align: center;
+}
+caption {
+    font-size: larger;
+    margin: 2%;
+}
+th,td {
+
+    padding: .65em;
+
+}
+
+th {
+    /* border: 1px solid #777; */
+    color: #fff;
+
+}
+
+td {
+    /* border: 1px solid #777; */
+}
+
+tbody tr:nth-child(odd) {
+    background: #ccc;
+}
+
+th:first-child {
+    border-radius: 9px 0 0 0;
+}
+
+th:last-child {
+    border-radius: 0 9px 0 0;
+}
+
+tr:last-child td:first-child {
+    border-radius: 0 0 0 9px;
+}
+
+tr:last-child td:last-child {
+    border-radius: 0 0 9px 0;
+}
+
+.ah {
+    text-decoration: none;
+    width: 103px;
+    display: grid;
+    background-color: #592786;
+    color: #fff;
+    padding: 2px 21px;
+    border-radius: 5px;
+    font-size: 25px;
+}
+
+.ac{
+    text-decoration: none;
+    width: 60px;
+    display: grid;
+    background-color: #485886;
+    color: #fff;
+    padding: 1px 10px;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #d1baba;
+    position: fixed;
+    bottom: -21px;
+    width: 100%;
+}
+
+li {
+    float: left;
+}
+
+li a ,li span{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+li input,li button{
+    color: #0f0f0f;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+
+.input[type=text] {
+    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('https://static.runoob.com/images/mix/searchicon.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+    color: black;
+}
+
+.input[type=text]:focus {
+    width: 100%;
+}
+
+
+
+
+
+.button5 {
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+}
+
+.button5:hover {
+    background-color: #555555;
+    color: white;
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: none;
+    background-color: #b7bcb8;
+    color: white;
+}
+
+
+
+.a2:link    {color:green;}
+.a2:visited {color:green;}
+.a2:hover   {color:red;}
+.a2:active  {color:yellow;}
