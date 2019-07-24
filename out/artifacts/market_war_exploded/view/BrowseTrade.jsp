@@ -16,7 +16,7 @@
 <ul>
     <c:if test="${sessionScope.user.userIdentity=='普通用户'}">
     <li><a class="active" href="Main.jsp">点击返回主菜单</a></li></c:if>
-    <c:if test="${empty sessionScope.user}"><li><a class="active" href="http://localhost:8080/market_war_exploded">点击返回登录界面</a></li></c:if>
+    <c:if test="${empty sessionScope.user.userIdentity}"><li><a class="active" href="http://localhost:8080/market_war_exploded">点击返回登录界面</a></li></c:if>
     <c:if test="${sessionScope.user.userIdentity=='管理员'}">
         <li><a class="active" href="AdminMain.jsp">点击返回主菜单</a></li></c:if>
     <li><a href="/market_war_exploded/TradeServlet?method=${sessionScope.judgeTrade}&currentPage=1">首页</a></li>

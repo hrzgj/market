@@ -18,10 +18,10 @@
     <li><a class="active" href="Main.jsp">返回主页</a></li>
     <li ><a href="/market_war_exploded/UserServlet?method=buyFindSendOrder">查看已发送</a></li>
     <li><a href="/market_war_exploded/UserServlet?method=buyFindDeliverOrder">查看已发货</a></li>
-    <li><a href="/market_war_exploded/UserServlet?method=buyFindTakeOrder">查看已到货</a></li>
+    <li><a href="/market_war_exploded/UserServlet?method=buyFindTakeOrder">查看已收货</a></li>
     <li><a href="/market_war_exploded/UserServlet?method=buyFindRefuseOrder">查看拒绝发货</a></li>
     <li><a href="/market_war_exploded/UserServlet?method=findBuyerOrder">查看所有</a></li>
-    <li><button class="button4" id="bt01" href="">导出订单</button></li>
+    <li><button class="button4" id="bt01" >导出订单</button></li>
 </ul>
 <c:forEach items="${sessionScope.buyerOrder.orderList}" var="order">
     <div class="life">
@@ -37,7 +37,7 @@
             <div class="amountPrice" style="left: 0px; top:10px;">发货地:${order.user.userAddress},收货地:${sessionScope.buyerOrder.user.userAddress}</div>
             <div class="phone">手机号：${order.user.userPhone}</div>
             <div class="amount">购买量：${order.tradesAmount}</div>
-            <div>购买者昵称：${order.user.userName}</div>
+            <div>出售者昵称：${order.user.userName}</div>
             <div class="amountPrice">应付款：${order.orderOriginSum}</div>
             <div class="factPay">实付款:${order.orderSum}</div>
             <div class="time">订单时间：${order.orderTime}</div>

@@ -15,7 +15,7 @@
 <a href="Main.jsp" class="a3">点击返回主菜单</a>
 <div id="addTrade">
     <form action="/market_war_exploded/TradeServlet?method=addTrade" method="post" enctype="multipart/form-data"  accept-charset="UTF-8" onsubmit="return check();">
-        <p><label>商品价格：<input type="text" name="tradePrice" class="input1" placeholder="请输入大于0的数"></label></p>
+        <p><label>商品价格：<input type="text" name="tradePrice" class="input1" placeholder="请输入大于0的数，2个小数点哦"></label></p>
         <p><label>商品数量：<input type="text" name="tradeAmount"class="input1" placeholder="请输入大于0的数"></label></p>
         <p><label>商品名称：<input type="text" name="tradeName" class="input1"></label></p>
         <p><label>商品种类：<select name="tradeKind">
@@ -45,7 +45,12 @@
         var tradeAmount=document.getElementsByName("tradeAmount")[0].value;
         var tradeName=document.getElementsByName("tradeName")[0].value;
         var tradeIntroduce=document.getElementsByName("tradeIntroduce")[0].value;
+        var picture=document.getElementsByName("picture")[0].value;
         var fileInput=document.getElementsByName("tradeImage")[0];
+        if(!picture.match("^.{4}$")){
+            alert("验证码格式错误");
+            return false;
+        }
         if(!fileInput.value){
             alert("没有选择文件！");
             return false;
@@ -58,19 +63,19 @@
             alert("不是有效的图片格式！");
             return false;
         }
-        if(tradePrice == '' || tradePrice < 0){
-            alert("商品价格格式错误");
+        if(!tradePrice.match("^[1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*$")){
+            alert("商品价格要2位小数哦");
             return false;
         }
-        if(tradeAmount == '' || tradeAmount < 0){
+        if(!tradeAmount.match("^[1-9]\\d*$")){
             alert("商品数量格式错误");
             return false;
         }
-        if(tradeName == '' || tradeName < 0){
-            alert("商品名称格式错误");
+        if(!tradeName.match("^.{1,32}$")||!tradeName.match("^[\u4E00-\u9FA5A-Za-z0-9]+$")){
+            alert("商品名称格式错误,");
             return false;
         }
-        if(tradeIntroduce == '' || tradeIntroduce < 0){
+        if(!tradeIntroduce.match(".{1,100}$")||!tradeIntroduce.match("^[\u4E00-\u9FA5A-Za-z0-9]+$")){
             alert("商品介绍格式错误");
             return false;
         }

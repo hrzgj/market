@@ -30,7 +30,7 @@
             <h2>商品介绍：</h2>
             <p>${requestScope.thisTrade.tradeIntroduce}</p>
             <c:if test="${sessionScope.user.userIdentity=='普通用户'&&empty requestScope.seller}">
-            <form method="post" action="/market_war_exploded/CarServlet?method=addTradeToCar&tradeID=${requestScope.thisTrade.tradeId}" onsubmit="return checkAmount();">
+            <form method="post" action="/market_war_exploded/CarServlet?method=addTradeToCar&tradeId=${requestScope.thisTrade.tradeId}" onsubmit="return checkAmount();">
                 <label>购买数量：<input type="text" name="carAccount"></label>
                 <button type="submit">确定加入购物车</button>
             </form>
@@ -52,11 +52,11 @@
         <ul>
             <li><a class="active" href="/market_war_exploded/TradeServlet?method=${sessionScope.judgeTrade}">返回</a></li>
             <c:if test="${empty requestScope.seller}">
-            <li><a href="/market_war_exploded/CarServlet?method=addTradeToCar&tradeID=${requestScope.thisTrade.tradeId}&carAccount=1">加入购物车</a></li>
+            <li><a href="/market_war_exploded/CarServlet?method=addTradeToCar&tradeId=${requestScope.thisTrade.tradeId}&carAccount=1">加入购物车</a></li>
             </c:if>
         </ul>
     </c:if>
-    <c:if test="${empty sessionScope.user}">
+    <c:if test="${empty sessionScope.user.userIdentity}">
         <ul><li><a href="view/BrowseTrade.jsp" class="active">点击返回浏览商品</a></li>
             <li><a href="http://localhost:8080/market_war_exploded">想要购买？快点登录吧</a></li>
             <li><a href="view/Register.jsp">或者注册一个账号吧</a></li>

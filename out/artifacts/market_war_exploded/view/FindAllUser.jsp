@@ -29,8 +29,8 @@
      <td><c:out value="${user.userStar}"/></td>
      <td><c:out value="${user.userPoint}"/></td>
     <c:if test="${user.userCan=='是'}">
-<form action="/market_war_exploded/UserServlet?method=banUserSell" method="post" onsubmit="return checkReason()">
-    <td><label><input type="text" placeholder="请填写禁用原因" name="reason"></label></td>
+<form action="/market_war_exploded/UserServlet?method=banUserSell" method="post" >
+    <td><label><input type="text" placeholder="请填写禁用原因" name="reason" ></label></td>
     <input type="hidden" name="userAccount" value="${user.userAccount}">
       <td><button class="button button5" type="submit" onclick="check()">禁用该用户</button></td>
     </form>
@@ -47,18 +47,15 @@
 <ul>
     <li><a href="AdminMain.jsp" >点击返回主菜单</a></li>
     <li><a href="/market_war_exploded/UserServlet?method=${sessionScope.judge}&currentPage=1" >首页</a></li>
-    <c:if test="${sessionScope.pageBean.currentPage !=1}">
     <li><a href="/market_war_exploded/UserServlet?method=${sessionScope.judge}&currentPage=${sessionScope.pageBean.currentPage-1}" >上一页</a></li>
-    </c:if><c:if test="${sessionScope.pageBean.currentPage!=sessionScope.pageBean.totalPage}">
     <li><a href="/market_war_exploded/UserServlet?method=${sessionScope.judge}&currentPage=${sessionScope.pageBean.currentPage+1}" >下一页</a></li>
-    </c:if>
     <li><a href="/market_war_exploded/UserServlet?method=${sessionScope.judge}&currentPage=${sessionScope.pageBean.totalPage}" >尾页</a></li>
-   <td>每页<label><select name="pageSize" id="select" onchange="change()"><option value="5">5</option><option value="8">8</option><option value="10">10</option></select></label>用户</td>
+   <li><label>每页<select name="pageSize" id="select" onchange="change()"><option value="5">5</option><option value="8">8</option><option value="10">10</option></select>用户</label></li>
     <li><span>总${sessionScope.pageBean.totalCount}个</span></li>
     <li><span>第${sessionScope.pageBean.currentPage}页</span></li>
     <li><span>共有${sessionScope.pageBean.totalPage}页</span></li>
     <form action="/market_war_exploded/UserServlet?method=${sessionScope.judge}" method="post">
-    <li>跳转到<label><input type="text" name="currentPage" style="width: 80px;height: 10px" size="10">页</label></li>
+    <li><label>跳转到<input type="text" name="currentPage" style="width: 80px;height: 10px" size="10">页</label></li>
     <li><button type="submit" >确定</button></li></form>
     <li><form action="/market_war_exploded/UserServlet?method=findUserByAccount" method="post" onsubmit="return checkAccount();">
         <input type="text" name="userAccount" placeholder="搜索用户账户" class="input">
@@ -70,7 +67,6 @@
 <script type="text/javascript">
     function change() {
         var pageLength=document.getElementsByName("pageSize")[0].value;
-
         $.ajax({
             type:"post",
             url:"/market_war_exploded/UserServlet?method=findAllUser&currentPage=1",
@@ -81,14 +77,6 @@
         var userAccount=document.getElementsByName("userAccount")[0].value;
         if(!userAccount.match("^[A-Za-z0-9]+$")) {
             alert("账户输入格式错误");
-            return false;
-        }
-        return true;
-    }
-    function checkReason() {
-        var reason=document.getElementsByName("reason")[0].value;
-        if(reason.match("^.{1,100}$")){
-            alert("输入格式错误");
             return false;
         }
         return true;

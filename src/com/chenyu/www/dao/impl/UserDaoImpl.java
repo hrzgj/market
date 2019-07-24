@@ -245,7 +245,7 @@ public class UserDaoImpl implements UserDao {
         User user=new User();
         user.setUserAccount(order.getOrderBuyer());
         //积分为此时购买金钱的11分之一与当前积分的和
-        userPointSurplus+=sum/11;
+        userPointSurplus+=sum/Constant.GET_POINT;
         user.setUserPoint(userPointSurplus);
         updateUserPoint(user);
         //增加订单
@@ -255,7 +255,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public double addOneOrderWithPoint(Order order) {
-        //要先找到
+        //要先找到商品
         String findSql="select * from trade where trade_id=?";
         Object[] p={order.getOrderTradeId()};
         ResultSet resultSet=DBUtil.executeQuery(findSql,p);
@@ -266,9 +266,9 @@ public class UserDaoImpl implements UserDao {
         try {
             if(resultSet!=null &&resultSet.next()){
                tradePrice=resultSet.getDouble("trade_price");
-               //商品实际付款=商品单价*商品数量
+               //商品应付款=商品单价*商品数量
                order.setOrderOriginSum(tradePrice*order.getOrderAmount());
-               //订单最后应付款=实付款-用户积分/10，此时的orderSum存的是用户现有积分
+               //订单实付款=应付款-用户积分/10，此时的orderSum存的是用户现有积分
                double sum=order.getOrderOriginSum()-order.getOrderSum()/10;
                BigDecimal bigDecimal=BigDecimal.valueOf(sum);
                //如果小于0，即积分比较多，将orderSum设为0，并存储剩余积分
@@ -440,7 +440,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean sellExportFile(UserOrder userOrder, String fileName) {
-        String sql="SELECT * FROM orders,trade WHERE orders_seller=? AND orders_trade=trade_id " +
+        String sql="SELECT orders_number,orders_time,orders_buyer,orders_seller,orders_state,trade_name,orders_amount,orders_sum,orders_originSum" +
+                " FROM orders,trade WHERE orders_seller=? AND orders_trade=trade_id " +
                 " AND orders_sellDelete!=1 INTO OUTFILE'D:/market/sql/" +fileName+
                 "' FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\\r\\n'";
         Object[] params={userOrder.getUser().getUserAccount()};
@@ -449,7 +450,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean buyExportFile(UserOrder userOrder, String fileName) {
-        String sql="SELECT * FROM orders,trade WHERE orders_buyer=? AND orders_trade=trade_id " +
+        String sql="SELECT orders_number,orders_time,orders_buyer,orders_seller,orders_state,trade_name,orders_amount,orders_sum,orders_originSum" +
+                " FROM orders,trade WHERE orders_buyer=? AND orders_trade=trade_id " +
                 " AND orders_buyDelete!=1 INTO OUTFILE'D:/market/sql/" +fileName+
                 "' FIELDS TERMINATED BY ',' ENCLOSED BY '\"' LINES TERMINATED BY '\\r\\n'";
         Object[] params={userOrder.getUser().getUserAccount()};

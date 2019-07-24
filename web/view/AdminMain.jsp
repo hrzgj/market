@@ -17,7 +17,6 @@
     <li class="dropdown">
         <a href="#" class="dropbtn">个人中心</a>
         <div class="dropdown-content">
-            <a href="FindUserMessage.jsp">查看自己信息</a>
             <a href="UpdateUser.jsp">修改自己信息</a>
             <a href="UpdateUserPassword.jsp" >修改密码</a>
         </div>

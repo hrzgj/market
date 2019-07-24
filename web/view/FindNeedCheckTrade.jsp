@@ -16,12 +16,9 @@
 <ul>
     <li><a href="view/AdminMain.jsp" class="ah">点击返回主菜单</a></li>
     <li><a href="/market_war_exploded/TradeServlet?method=adminFindCheckTrade&currentPage=1">首页</a></li>
-    <c:if test="${requestScope.pageTrade.currentPage !=1}">
-      <li> <a href="/market_war_exploded/TradeServlet?method=adminFindCheckTrade&currentPage=${requestScope.pageTrade.currentPage-1}">上一页</a></c:if></li>
-    <c:if test="${requestScope.pageTrade.currentPage!=requestScope.pageTrade.totalPage&&requestScope.pageTrade.currentPage>1}">
-        <li><a href="/market_war_exploded/TradeServlet?method=adminFindCheckTrade&currentPage=${requestScope.pageTrade.currentPage+1}" >下一页</a></li></c:if>
-    <c:if test="${requestScope.pageTrade.currentPage>1}">
-    <li><a href="/market_war_exploded/TradeServlet?method=adminFindCheckTrade&currentPage=${requestScope.pageTrade.totalPage}" >尾页</a></li></c:if>
+      <li> <a href="/market_war_exploded/TradeServlet?method=adminFindCheckTrade&currentPage=${requestScope.pageTrade.currentPage-1}">上一页</a></li>
+        <li><a href="/market_war_exploded/TradeServlet?method=adminFindCheckTrade&currentPage=${requestScope.pageTrade.currentPage+1}" >下一页</a></li>
+    <li><a href="/market_war_exploded/TradeServlet?method=adminFindCheckTrade&currentPage=${requestScope.pageTrade.totalPage}" >尾页</a></li>
     <li><a>总${requestScope.pageTrade.totalCount}个</a></li>
     <li><a>共有${requestScope.pageTrade.totalPage}页</a></li>
 </ul>

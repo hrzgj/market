@@ -19,6 +19,10 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     public Boolean addTrade(Trade trade) {
+        //默认为审核状态
+        trade.setTradeState("审核");
+        //默认已出售为0
+        trade.setTradeBeenAmount(0);
         return tradeDao.addTrade(trade);
     }
 

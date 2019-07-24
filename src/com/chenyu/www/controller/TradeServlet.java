@@ -27,11 +27,13 @@ import java.util.List;
 public class TradeServlet extends BaseServlet {
     private static TradeService tradeService=new TradeServiceImpl();
 
-    //游客登录
+    //游客登录直接展示商品
     public void visit(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
         //清除所有的session
         request.getSession().invalidate();
+        User user=new User();
+        request.getSession().setAttribute("user",user);
         this.findAllTrade(request,response);
     }
 
@@ -44,14 +46,12 @@ public class TradeServlet extends BaseServlet {
      */
     public void addTrade(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        User user= (User) request.getSession().getAttribute("user");
-        if(user==null){
-            request.getSession().setAttribute(Constant.OUT_DATED,"登录过时了");
-            response.sendRedirect("view/Main.jsp");
+        if(!examineUser(request,response)){
             return;
         }
-        Iterator<FileItem> itemIterator=loadPhoto(request);
+        User user= (User) request.getSession().getAttribute("user");
         Trade trade=new Trade();
+        Iterator<FileItem> itemIterator=loadPhoto(request);
         if (itemIterator != null) {
             while (itemIterator.hasNext()) {
                 FileItem fileItem = itemIterator.next();
@@ -99,10 +99,6 @@ public class TradeServlet extends BaseServlet {
         }
         //发布者的账户
         trade.setTradeUser(user.getUserAccount());
-        //默认为审核状态
-        trade.setTradeState("审核");
-        //默认已出售为0
-        trade.setTradeBeenAmount(0);
         if(!tradeService.addTrade(trade)){
             response.sendRedirect("view/AddTradeSuccess.jsp");
         }
@@ -121,16 +117,30 @@ public class TradeServlet extends BaseServlet {
         //排序信号
         int sort;
         //获取排序信号,无信号为自然排序
-        if(request.getParameter(Constant.PRICE_SORT)==null &&request.getSession().getAttribute(Constant.PRICE_SORT)==null){
+        if(request.getParameter(Constant.PRICE_SORT)==null && request.getSession().getAttribute(Constant.PRICE_SORT)==null){
             sort=0;
         }
         //若request为空，表示信号已发送过，从session拿
         else if(request.getParameter(Constant.PRICE_SORT)==null){
-            sort= (int) request.getSession().getAttribute(Constant.PRICE_SORT);
+
+            try {
+                sort = (int) request.getSession().getAttribute(Constant.PRICE_SORT);
+            }catch (NumberFormatException e){
+                sort=0;
+            }
         }
         //第一次获取信号，从request拿，并存入session
         else {
-            sort= Integer.parseInt(request.getParameter(Constant.PRICE_SORT));
+            //如果从前端传来的不是数字，设置sort为默认
+            try {
+                sort = Integer.parseInt(request.getParameter(Constant.PRICE_SORT));
+            }catch (NumberFormatException e){
+                sort=0;
+            }
+            //如果是数字，当不是0-4直接，直接设置sort为0
+            if(sort>Constant.BEEN_AMOUNT_DESC||sort<0){
+                sort=0;
+            }
             request.getSession().setAttribute(Constant.PRICE_SORT,sort);
         }
         page.setCurrentPage(PageUtil.loadCurrentPage(request));
@@ -158,7 +168,7 @@ public class TradeServlet extends BaseServlet {
         page.setTotalCount(tradeService.getNeedCheck());
         page.setCurrentPage(PageUtil.loadCurrentPage(request));
         page.setPageSize(PageUtil.loadPageSize(request,"10"));
-        if(page.getCurrentPage()!=1 && page.getCurrentPage()>page.getTotalPage()){
+        if(page.getCurrentPage()>page.getTotalPage()){
             page.setCurrentPage(page.getTotalPage());
         }
         page=tradeService.adminFindCheck(page);
@@ -169,15 +179,22 @@ public class TradeServlet extends BaseServlet {
     //通过前端传来的商品的id得到该商品信息
     public void findThisTrade(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
+        if(!examineUser(request,response)){
+            return;
+        }
         User user= (User) request.getSession().getAttribute("user");
         //获得该商品id
+        if(request.getParameter("pageId")==null){
+            request.getSession().setAttribute("error",1);
+            response.sendRedirect("view/Main.jsp");
+            return;
+        }
         int tradeID= Integer.parseInt(request.getParameter("pageId"));
         //根据id得到数据库该商品所有信息
         Trade trade=tradeService.findTradeByID(tradeID);
         request.setAttribute("thisTrade",trade);
-        //如果用户是游客，即user为空
-        if(user==null){
-            request.getSession().setAttribute("judgeTrade","findAllTrade");
+        //如果用户是游客，即user的身份为空
+        if(user.getUserIdentity()==null){
             request.getRequestDispatcher("view/FindThisTrade.jsp").forward(request, response);
             return;
         }
@@ -192,6 +209,10 @@ public class TradeServlet extends BaseServlet {
             request.getRequestDispatcher("view/FindThisTrade.jsp").forward(request, response);
             return;
         }
+        else if (request.getParameter("buyer")==null&&!user.getUserAccount().equals(trade.getTradeUser())){
+            request.getRequestDispatcher("view/FindThisTrade.jsp").forward(request, response);
+            return;
+        }
         //否则，则判定用户是出售者，可修改
         else {
             request.getRequestDispatcher("view/UpdateThisTrade.jsp").forward(request,response);
@@ -202,6 +223,11 @@ public class TradeServlet extends BaseServlet {
     //用户管理员通过审核用户发售商品
     public void checkTrade(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
+        if(request.getParameter("pageId")==null){
+            request.getSession().setAttribute("error",1);
+            response.sendRedirect("view/Main.jsp");
+            return;
+        }
         int tradeId= Integer.parseInt(request.getParameter("pageId"));
         if(!tradeService.updateTradeState(tradeId)){
             response.sendRedirect("/market_war_exploded/TradeServlet?method=adminFindCheckTrade");
@@ -211,12 +237,10 @@ public class TradeServlet extends BaseServlet {
     //用户查找自己出售的用户
     public void findTradeByUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
-        User user= (User) request.getSession().getAttribute("user");
-        if(user==null){
-            request.getSession().setAttribute("outDated","登录过时了");
-            response.sendRedirect("view/Main.jsp");
+        if(!examineUser(request,response)){
             return;
         }
+        User user= (User) request.getSession().getAttribute("user");
         Page<Trade> page=new Page<>();
         page.setCurrentPage(PageUtil.loadCurrentPage(request));
         page.setTotalCount(tradeService.getTotalByUser(user.getUserAccount()));
@@ -230,6 +254,13 @@ public class TradeServlet extends BaseServlet {
     public void updateTrade(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
         Trade trade=new Trade();
+        if(request.getParameter("tradeId")==null||request.getParameter("tradePrice")==null||
+                request.getParameter("tradeIntroduce")==null||
+                request.getParameter("tradeAmount")==null||request.getParameter("tradeName")==null) {
+            request.getSession().setAttribute("error",1);
+            response.sendRedirect("view/Main.jsp");
+            return;
+        }
         trade.setTradeId(Integer.parseInt(request.getParameter("tradeId")));
         trade.setTradeName(request.getParameter("tradeName"));
         trade.setTradePrice(Double.parseDouble(request.getParameter("tradePrice")));
@@ -243,6 +274,9 @@ public class TradeServlet extends BaseServlet {
     //用户修改自己商品的图片
     public void updateTradePhoto(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
+        if(!examineTradeId(request,response)){
+            return;
+        }
         Iterator<FileItem> itemIterator=loadPhoto(request);
         Trade trade=new Trade();
         if(itemIterator!=null &&itemIterator.hasNext()) {
@@ -274,7 +308,12 @@ public class TradeServlet extends BaseServlet {
     public void findAllTradeByUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
         String userAccount=null;
-        //判断是否第一次接收用户账户，如果是从request拿并推到session，如果不是从session拿
+        //判断是否第一次接收用户账户，如果是从request拿并推到session，如果不是，从session拿,如果两者都没，说明前端乱传
+        if(request.getParameter(Constant.USER_ACCOUNT)==null&&request.getSession().getAttribute(Constant.USER_ACCOUNT)==null){
+            request.getSession().setAttribute("error",1);
+            response.sendRedirect("view/Main.jsp");
+            return;
+        }
         if(request.getParameter(Constant.USER_ACCOUNT)!=null){
             userAccount=request.getParameter(Constant.USER_ACCOUNT);
             request.getSession().setAttribute(Constant.USER_ACCOUNT,userAccount);
@@ -309,7 +348,12 @@ public class TradeServlet extends BaseServlet {
             throws ServletException, IOException{
         Page<Trade> page=new Page<>();
         String tradeName=null;
-        //判断是否第一次接收到商品名称，如果是从request拿并推到session，如果不是从session拿
+        //判断是否第一次接收到商品名称，如果是从request拿并推到session，如果不是从session拿,如果都没有，前端乱传
+        if(request.getSession().getAttribute(Constant.TRADE_NAME)==null&&request.getParameter(Constant.TRADE_NAME)==null){
+            request.getSession().setAttribute("error",1);
+            response.sendRedirect("view/Main.jsp");
+            return;
+        }
         if(request.getParameter(Constant.TRADE_NAME)!=null){
             tradeName=request.getParameter(Constant.TRADE_NAME);
             request.getSession().setAttribute(Constant.TRADE_NAME,tradeName);
@@ -385,8 +429,14 @@ public class TradeServlet extends BaseServlet {
     //管理员退回商品，即将商品状态变为审核
     public void adminSendBackTrade(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
+        if(!examineTradeId(request,response)){
+            return;
+        }
         int tradeId= Integer.parseInt(request.getParameter("tradeId"));
         if(!tradeService.adminSendBack(tradeId)){
+            this.findAllTrade(request,response);
+        }
+        else {
             this.findAllTrade(request,response);
         }
     }
@@ -394,15 +444,16 @@ public class TradeServlet extends BaseServlet {
     //用户删除商品或管理员删除商品
     public void removeTrade(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
-
+        if(!examineUser(request,response)){
+            return;
+        }
         User user= (User) request.getSession().getAttribute("user");
-        if(user==null){
-            request.getSession().setAttribute("outDated","登录过时了");
-            response.sendRedirect("view/Main.jsp");
+        if(!examineTradeId(request,response)){
             return;
         }
         int tradeId= Integer.parseInt(request.getParameter("tradeId"));
         if(!tradeService.removeTrade(tradeId)){
+            //判断用户的身份
             if(Constant.USER_IDENTITY1.equals(user.getUserIdentity())){
                 this.adminFindCheckTrade(request,response);
             }
@@ -412,16 +463,14 @@ public class TradeServlet extends BaseServlet {
         }
     }
 
-    //用户删除商品或管理员删除商品
+    //用户申请删除商品
     public void readyRemoveTrade(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
-        User user= (User) request.getSession().getAttribute("user");
-        int tradeId= Integer.parseInt(request.getParameter("tradeId"));
-        if(user==null){
-            request.getSession().setAttribute("outDated","登录过时了");
-            response.sendRedirect("view/Main.jsp");
+        if(!examineTradeId(request,response)||!examineUser(request,response)){
             return;
         }
+        User user= (User) request.getSession().getAttribute("user");
+        int tradeId= Integer.parseInt(request.getParameter("tradeId"));
         if(!tradeService.readyRemoveTrade(tradeId)){
             if(Constant.USER_IDENTITY1.equals(user.getUserIdentity())){
                 this.adminFindCheckTrade(request,response);

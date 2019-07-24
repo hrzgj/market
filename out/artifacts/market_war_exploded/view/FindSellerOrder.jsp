@@ -17,7 +17,7 @@
     <li><a class="active" href="Main.jsp">返回主页</a></li>
     <li><a href="/market_war_exploded/UserServlet?method=sellFindSendOrder">查看已发送</a></li>
     <li><a href="/market_war_exploded/UserServlet?method=sellFindDeliverOrder">查看已发货</a></li>
-    <li><a href="/market_war_exploded/UserServlet?method=sellFindTakeOrder">查看已到货</a></li>
+    <li><a href="/market_war_exploded/UserServlet?method=sellFindTakeOrder">查看已收货</a></li>
     <li><a href="/market_war_exploded/UserServlet?method=sellFindRefuseOrder">查看拒绝发货</a></li>
     <li><a href="/market_war_exploded/UserServlet?method=findSellerOrder">查看全部</a></li>
     <li><button class="button4" id="bt01" >导出当前显示订单</button></li>

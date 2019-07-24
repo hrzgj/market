@@ -22,14 +22,23 @@ public class CarServlet extends BaseServlet {
     //增加商品到购物车，接收前端传来的商品id和商品数量(tradeID和carAccount)
     public void addTradeToCar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        User user= (User) request.getSession().getAttribute("user");
-        if(user==null){
-            request.getSession().setAttribute(Constant.OUT_DATED,"登录过时了");
-            response.sendRedirect("view/Main.jsp");
+        User user;
+        if(examineUser(request,response)){
+            user= (User) request.getSession().getAttribute("user");
+        }
+        else {
             return;
         }
         Car car=new Car();
-        car.setCarTrade(Integer.parseInt(request.getParameter("tradeID")));
+        if(!examineTradeId(request,response)){
+            return;
+        }
+        if(request.getParameter("carAccount")==null){
+             request.getSession().setAttribute("error",1);
+             response.sendRedirect("view/Main.jsp");
+             return;
+        }
+        car.setCarTrade(Integer.parseInt(request.getParameter("tradeId")));
         car.setCarAmount(Integer.parseInt(request.getParameter("carAccount")));
         //先找出这个商品的信息
         Trade trade=tradeService.findTradeByID(car.getCarTrade());
@@ -51,13 +60,14 @@ public class CarServlet extends BaseServlet {
     public void findCar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
         UserCar userCar = new UserCar();
-        User user= (User) request.getSession().getAttribute("user");
-        userCar.setUser(user);
-        if(user==null){
-            request.getSession().setAttribute(Constant.OUT_DATED,"登录过时了");
-            response.sendRedirect("view/Main.jsp");
+        User user;
+        if(examineUser(request,response)){
+            user= (User) request.getSession().getAttribute("user");
+        }
+        else {
             return;
         }
+        userCar.setUser(user);
         userCar=tradeService.findCar(userCar);
         userCar.setTradesPrice();
         request.getSession().setAttribute("userCar",userCar);
@@ -67,8 +77,16 @@ public class CarServlet extends BaseServlet {
     //移除当前用户购物车某一个商品(tradeId)
     public void removeOne(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
+        if(!examineTradeId(request,response)){
+            return;
+        }
         int tradeId= Integer.parseInt(request.getParameter("tradeId"));
         UserCar userCar= (UserCar) request.getSession().getAttribute("userCar");
+        if(userCar==null){
+            request.getSession().setAttribute(Constant.OUT_DATED,"登录过时了");
+            response.sendRedirect("view/Main.jsp");
+            return;
+        }
         String userAccount=userCar.getUser().getUserAccount();
         if(!tradeService.removeTrade(tradeId,userAccount)) {
             userCar = tradeService.removeTrade(tradeId, userCar);
@@ -81,6 +99,9 @@ public class CarServlet extends BaseServlet {
     //移除当前用户购物车某一个商品的一个数量(tradeId)
     public void removeOneAmount(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
+        if(!examineTradeId(request,response)){
+            return;
+        }
         int tradeId= Integer.parseInt(request.getParameter("tradeId"));
         UserCar userCar= (UserCar) request.getSession().getAttribute("userCar");
         if(!tradeService.removeOneAmount(tradeId,userCar.getUser().getUserAccount())){
@@ -94,13 +115,19 @@ public class CarServlet extends BaseServlet {
     //清除当前用户购物车所有商品
     public void removeAll(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException{
+        UserCar userCar= (UserCar) request.getSession().getAttribute("userCar");
+        //如果购物车为空不进行操作
+        if(userCar.getTrades().size()==0){
+            response.sendRedirect("view/FindCar.jsp");
+            return;
+        }
         User user= (User) request.getSession().getAttribute("user");
         if(user==null){
             request.getSession().setAttribute(Constant.OUT_DATED,"登录过时了");
             response.sendRedirect("view/Main.jsp");
             return;
         }
-        if(!tradeService.removeAll(user.getUserAccount())){
+        if(!tradeService.removeAll(userCar.getUser().getUserAccount())){
             request.getSession().removeAttribute("userCar");
             response.sendRedirect("view/FindCar.jsp");
         }
@@ -111,7 +138,7 @@ public class CarServlet extends BaseServlet {
             throws ServletException, IOException{
         UserCar userCar= (UserCar) request.getSession().getAttribute("userCar");
         //如果购物车是空，不进行操作
-        if(userCar==null){
+        if(userCar.getTrades().size()==0){
             response.sendRedirect("view/FindCar.jsp");
             return;
         }

@@ -23,13 +23,13 @@
             <p>昵称： <label><input type="text" name="user_name" placeholder="昵称：32位内的字符"></label></p>
             <p>手机号: <label><input type="text" name="user_phone" placeholder="手机号为11个数字"></label></p>
             <p>身份证: <label><input type="text" name="user_idCard" id="userIdCard"></label><span id="haveUserIdCard" style="position: absolute;left: 163px;top: 256px;"></span></p>
-            <p>用户地址：<label><input type="text" name="user_address"></label></p>
-            <p><span>用户头像：</span><input type="file" name="image" class="button1" ></p>
+            <p><span style="position: relative;left: -55px">用户发货收货地址：</span><label><input type="text" name="user_address" style="position: relative;left: -46px"></label></p>
             <p>验证码：<label><input name="picture" type="text"  size="3" /></label>
                 <img src="/market_war_exploded/VerifyCodeServlet" id="img" alt="验证码">
                 <a href="javascript:change()">换一张</a>
                 <font color="red">${requestScope.msg}</font>
             </p>
+            <p><span>用户头像：</span><input type="file" name="image" class="button1" ></p>
             <p><button class="button2" type="submit">点击注册</button></p>
         </form>
     </table>
@@ -49,6 +49,7 @@
         var userPhone=document.getElementsByName("user_phone")[0].value;
         var userIdCard=document.getElementsByName("user_idCard")[0].value;
         var userAddress=document.getElementsByName("user_address")[0].value;
+        var picture=document.getElementsByName("picture")[0].value;
         var fileInput=document.getElementsByName("image")[0];
         if(!userAccount.match("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$")) {
             alert("账户输入格式错误");
@@ -58,7 +59,7 @@
             alert("密码输入格式错误");
             return false;
         }
-        if(userName.length>32||userName.length<0){
+        if(!userName.match("^[\u4E00-\u9FA5A-Za-z0-9]+$")||!userName.match("^.{1,32}$")){
             alert("昵称格式输入错误");
             return false;
         }
@@ -84,6 +85,10 @@
         }
         if(fileInput.files[0].type !== 'image/jpeg' && fileInput.files[0].type !== 'image/jpg' && fileInput.files[0].type !== 'image/gif' && fileInput.files[0].type !== 'image/png'){
             alert("不是有效的图片格式！");
+            return false;
+        }
+        if(!picture.match("^.{4}$")){
+            alert("验证码格式错误");
             return false;
         }
         return true;

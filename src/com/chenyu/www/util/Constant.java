@@ -84,7 +84,7 @@ public class Constant {
 
     //导出数据库的订单先存到这里
     public static final String ORDER_PATH="D:/market/sql/";
-
+//C:\ProgramData\MySQL\MySQL Server 5.7\Data\market
     /**
      * 用户得到的积分是当前订单金钱的11分之1
      */

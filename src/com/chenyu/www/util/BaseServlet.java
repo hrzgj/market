@@ -1,6 +1,8 @@
 package com.chenyu.www.util;
 
 import com.chenyu.www.po.Trade;
+import com.chenyu.www.po.User;
+import com.chenyu.www.po.UserCar;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -30,7 +32,9 @@ public abstract class BaseServlet extends HttpServlet {
         String methodName = req.getParameter("method");
 
         if(methodName == null || methodName.trim().isEmpty()) {
-            throw new RuntimeException("您没有传递method参数！无法确定您想要调用的方法！");
+            req.getSession().setAttribute("error",1);
+            resp.sendRedirect("view/Main.jsp");
+            return ;
         }
 
         /*
@@ -45,7 +49,9 @@ public abstract class BaseServlet extends HttpServlet {
             method = c.getMethod(methodName,
                     HttpServletRequest.class, HttpServletResponse.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            req.getSession().setAttribute("error",1);
+            resp.sendRedirect("view/Main.jsp");
+            return;
         }
         try {
             if (method != null) {
@@ -67,7 +73,6 @@ public abstract class BaseServlet extends HttpServlet {
         ServletFileUpload upload=new ServletFileUpload(factory);
         upload.setHeaderEncoding("UTF-8");
         List<FileItem> items=null;
-        Trade trade=new Trade();
         try {
             //通过parseRequest解析form中的所有字段，并存入list集合中
             items=upload.parseRequest(request);
@@ -79,5 +84,50 @@ public abstract class BaseServlet extends HttpServlet {
             itemIterator=items.iterator();
         }
         return itemIterator;
+    }
+
+
+    //检查前端传来的tradeId是否为空
+    protected boolean examineTradeId(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if(request.getParameter("tradeId")==null){
+            request.getSession().setAttribute("error",1);
+            response.sendRedirect("view/Main.jsp");
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    //检查登录是否失效
+    protected boolean examineUser(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        User user= (User) request.getSession().getAttribute("user");
+        if(user==null){
+            request.getSession().setAttribute(Constant.OUT_DATED,"登录过时了");
+            response.sendRedirect("view/Main.jsp");
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    //检查前端传来商品排序是否为空
+    protected boolean examineTradeAmount(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        if(request.getParameter("tradeAmount")==null){
+            request.getSession().setAttribute("error",1);
+            response.sendRedirect("view/Main.jsp");
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    protected boolean examineOrderId(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        if(request.getParameter("orderId")==null){
+            request.getSession().setAttribute("error",1);
+            response.sendRedirect("view/Main.jsp");
+            return false;
+        }else {
+            return true;
+        }
     }
 }

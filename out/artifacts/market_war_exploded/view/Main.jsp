@@ -40,7 +40,7 @@
             <span style="position:absolute;left:163px;top:76px;">禁售原因：${sessionScope.user.userReason}</span>
         </c:if>
         <a href="/market_war_exploded/TradeServlet?method=findTradeByUser" class="a2">查看修改自己发布的商品</a>
-        <a href="/market_war_exploded/UserServlet?method=findSellerOrder" class="a1">查看其它用户提交的订单</a>
+        <a href="/market_war_exploded/UserServlet?method=findSellerOrder" class="a1">查看其他用户购买自己商品的订单</a>
 </div>
 <!-- 弹窗 -->
 <div id="myModal" class="modal">
@@ -56,10 +56,14 @@
 
 </div>
 </body>
-<c:if test="${not empty sessionScope.outDated||empty sessionScope.user}">
+<c:if test="${not empty sessionScope.outDated||empty sessionScope.user.userIdentity}">
     <script type="text/javascript">alert("登录状态过时了，请重新登录")</script>
     <c:remove var="outDated" scope="session"/>
     <%response.setHeader("refresh","0;url=http://localhost:8080/market_war_exploded");%>
+</c:if>
+<c:if test="${not empty sessionScope.error}">
+    <script type="text/javascript">alert("不许耍小聪明哦")</script>
+    <c:remove var="error" scope="session"/>
 </c:if>
 <script type="text/javascript">
     function checkPhoto() {
@@ -82,7 +86,7 @@
     }
     function checkAppeal() {
         var appeal=document.getElementsByName("appeal")[0].value;
-        if(!appeal.match("^.{1,100}$")){
+        if(!appeal.match("^.{1,100}$")||!appeal.match("^[\u4E00-\u9FA5A-Za-z0-9]+$")){
             alert("输入格式错误");
             return false;
         }

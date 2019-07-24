@@ -73,11 +73,11 @@
             alert("商品数量格式错误");
             return false;
         }
-        if(!tradeName.match("^[\u4E00-\u9FA5A-Za-z0-9]+$")){
+        if(!tradeName.match("^[\u4E00-\u9FA5A-Za-z0-9]+$")||!tradeName.match("^.{1,32}$")){
             alert("商品名称格式错误");
             return false;
         }
-        if(!tradeIntroduce.match("^.{1,100}$")){
+        if(!tradeIntroduce.match("^.{1,100}$")||!tradeIntroduce.match("^[\u4E00-\u9FA5A-Za-z0-9]+$")){
             alert("商品介绍格式错误");
             return false;
         }

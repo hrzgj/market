@@ -24,8 +24,8 @@
         <p></p><span style="color: green">身份证：</span>${sessionScope.user.userIdCard}
         <p></p><span style="color: green">昵称:</span><label><input value="${sessionScope.user.userName}" name="userName" placeholder="昵称：32位内的字符"></label>
         <p></p><span style="color: green">手机号：</span><label><input value="${sessionScope.user.userPhone}" name="userPhone" placeholder="11位数字"></label>
-        <p></p><span style="color: green">地址：</span><label><input value="${sessionScope.user.userAddress}" name="userAddress"></label>
-        <p><button class="button2" type="submit">点击注册</button></p>
+        <p></p><span style="color: green">发货收货地址：</span><label><input value="${sessionScope.user.userAddress}" name="userAddress"></label>
+        <p><button class="button2" type="submit">点击修改</button></p>
     </form>
 </div>
 </body>
@@ -34,7 +34,7 @@
         var userName=document.getElementsByName("userName")[0].value;
         var userPhone=document.getElementsByName("userPhone")[0].value;
         var userAddress=document.getElementsByName("userAddress")[0].value;
-        if(!userName.match("^.{1,32}$")){
+        if(!userName.match("^.{1,32}$")||!userName.match("^[\u4E00-\u9FA5A-Za-z0-9]+$")){
             alert("昵称格式输入错误");
             return false;
         }
